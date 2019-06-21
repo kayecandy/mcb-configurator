@@ -22,7 +22,6 @@ $.fn.extend({
  	cndceConfigurator: function(params){
  		var defaults = {
  			modelURL: './assets/models/demo/model.json',
- 			materialURL: './assets/models/demo/scania.mtl',
  			texturesURL: './assets/models/demo/textures/',
 
  			modelPosition: {x: 0, y: 0, z: 0},
