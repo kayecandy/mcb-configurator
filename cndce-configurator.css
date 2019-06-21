@@ -1,0 +1,268 @@
+/***************************************************************************
+ *  																	   *
+ *																		   *
+ *	     ___           ___           ___           ___           ___       *
+ *	    /  /\         /  /\         /  /\         /  /\         /  /\      *
+ *	   /  /::\       /  /::|       /  /::\       /  /::\       /  /::\     *
+ *	  /  /:/\:\     /  /:|:|      /  /:/\:\     /  /:/\:\     /  /:/\:\    *
+ *	 /  /:/  \:\   /  /:/|:|__   /  /:/  \:\   /  /:/  \:\   /  /::\ \:\   *
+ *	/__/:/ \  \:\ /__/:/ |:| /\ /__/:/ \__\:| /__/:/ \  \:\ /__/:/\:\ \:\  *
+ *	\  \:\  \__\/ \__\/  |:|/:/ \  \:\ /  /:/ \  \:\  \__\/ \  \:\ \:\_\/  *
+ *	 \  \:\           |  |:/:/   \  \:\  /:/   \  \:\        \  \:\ \:\    *
+ *	  \  \:\          |__|::/     \  \:\/:/     \  \:\        \  \:\_\/    *
+ *	   \  \:\         /__/:/       \__\::/       \  \:\        \  \:\      *
+ *	    \__\/         \__\/            ~~         \__\/         \__\/      *
+ * 																		   *
+ *																		   *
+ ***************************************************************************/
+
+
+ html, body{
+ 	margin: 0;
+ 	width: 100%;
+ 	height: 100%;
+ }
+
+ body{
+ 	font-family: 'Montserrat', sans-serif;
+ 	font-weight: lighter;
+ }
+
+ h1,h2,h3,h4,h5,h6{
+ 	font-weight: normal;
+ 	text-transform: uppercase;
+ 	letter-spacing: 3px;
+ 	margin: 0;
+ }
+
+ .cndce-template{
+ 	display: none !important;
+ }
+
+ #cndce-configurator{
+ 	width: 100%;
+ 	height: 100%;
+
+ 	background: url('./assets/images/grey-background-texture.jpg');
+ 	display: -webkit-box;
+ 	display: -webkit-flex;
+ 	display: -moz-box;
+ 	display: -ms-flexbox;
+ 	display: flex;
+ }
+
+#cndce-configurator .cndce-main-container{
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: column;
+	   -moz-box-orient: vertical;
+	   -moz-box-direction: normal;
+	    -ms-flex-direction: column;
+	        flex-direction: column;
+	-webkit-box-flex: 1;
+	-webkit-flex-grow: 1;
+	   -moz-box-flex: 1;
+	    -ms-flex-positive: 1;
+	        flex-grow: 1;
+}
+
+
+ #cndce-configurator .cndce-configurator-canvas-container{
+ 	position: relative;
+ 	-webkit-box-flex: 1;
+ 	-webkit-flex-grow: 1;
+ 	   -moz-box-flex: 1;
+ 	    -ms-flex-positive: 1;
+ 	        flex-grow: 1;
+ }
+
+ #cndce-configurator .cndce-configurator-canvas-container::before{
+ 	position: absolute;
+ 	content: url('./assets/images/icon-gear.svg');
+ 	left: 50%;
+ 	top: 50%;
+ 	opacity: 1;
+ 	-webkit-transition: all 0.3s ease-in-out;
+ 	-o-transition: all 0.3s ease-in-out;
+ 	-moz-transition: all 0.3s ease-in-out;
+ 	transition: all 0.3s ease-in-out;
+ 	-webkit-transform: translate(-50%, -50%);
+ 	   -moz-transform: translate(-50%, -50%);
+ 	    -ms-transform: translate(-50%, -50%);
+ 	     -o-transform: translate(-50%, -50%);
+ 	        transform: translate(-50%, -50%);
+ }
+
+ #cndce-configurator.model-loaded .cndce-configurator-canvas-container::before{
+ 	opacity: 0;
+ }
+
+ #cndce-configurator #cndce-configurator-canvas{
+ 	width: 100% !important;
+ 	height: 100% !important;
+ 	position: absolute;
+ 	opacity: 0;
+
+ 	-webkit-transition: all 0.3s ease-in-out;
+ 	-o-transition: all 0.3s ease-in-out;
+ 	-moz-transition: all 0.3s ease-in-out;
+ 	transition: all 0.3s ease-in-out;
+ }
+
+ #cndce-configurator.model-loaded #cndce-configurator-canvas{
+ 	opacity: 1;
+ }
+
+
+
+ #cndce-configurator .cndce-hover{
+ 	position: absolute;
+    z-index: 50;
+    background: #000000e6;
+    color: white;
+    opacity: 0;
+    padding: 1rem;
+    border-radius: 1rem;
+    pointer-events: none;
+    -webkit-transition: opacity 0.3s ease-in-out;
+    -o-transition: opacity 0.3s ease-in-out;
+    -moz-transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out;
+ }
+
+ #cndce-configurator.part-hovered{
+ 	cursor: pointer;
+ }
+
+ #cndce-configurator.part-hovered .cndce-hover{
+ 	opacity: 1;
+ }
+
+ #cndce-configurator .cndce-hover .cndce-hover-title{
+ 	margin-top: 0;
+ }
+
+
+ #cndce-configurator .cndce-options{
+	width: 100%;
+	padding: 1rem;
+ 	background: url('./assets/images/red-background-texture.jpg');
+ 	position: relative;
+ 	background-size: cover;
+ 	-moz-box-sizing: border-box;
+ 	     box-sizing: border-box;
+ 	-webkit-box-flex: 0;
+ 	-webkit-flex-grow: 0;
+ 	   -moz-box-flex: 0;
+ 	    -ms-flex-positive: 0;
+ 	        flex-grow: 0;
+ 	-webkit-flex-shrink: 0;
+ 	    -ms-flex-negative: 0;
+ 	        flex-shrink: 0;
+ }
+
+
+#cndce-configurator .cndce-options .cndce-option{
+	height: 3rem;
+	opacity: 0.6;
+	cursor: pointer;
+	display: inline-block;
+	margin: 0 1rem;
+
+	-webkit-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
+}
+
+#cndce-configurator .cndce-options .cndce-option.active,
+#cndce-configurator .cndce-options .cndce-option:hover{
+	opacity: 1;
+}
+
+#cndce-configurator .cndce-options .cndce-option .cndce-option-icon{
+	height: 100%;
+	-webkit-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
+}
+#cndce-configurator.option-active .cndce-options .cndce-option .cndce-option-icon{
+	opacity: 0;
+}
+
+#cndce-configurator .cndce-options .cndce-option-choices{
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 1rem;
+	opacity: 0;
+	z-index: -1;
+	visibility: collapse;
+
+	-webkit-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
+}
+
+#cndce-configurator .cndce-options .cndce-option.active .cndce-option-choices{
+	opacity: 1;
+	z-index: 1;
+	visibility: visible;
+}
+
+#cndce-configurator .cndce-option-choices-back{
+	display: inline-block;
+}
+#cndce-configurator .cndce-option-choices-back img{
+	height: 3rem;
+}
+
+
+
+/* OPTIONS */
+#cndce-configurator .cndce-options .cndce-choice-color {
+    width: 3rem;
+    height: 3rem;
+    display: inline-block;
+    border-radius: 50%;
+    margin: 0 0.7rem;
+}
+
+
+#cndce-configurator .cndce-options .cndce-choice-rim{
+	width: 3rem;
+	height: 3rem;
+	display: inline-block;
+	margin: 0 0.7rem;
+	background-size: cover;
+	background-position: center;
+}
+
+
+
+ #cndce-configurator .cndce-selections-container{
+ 	background: black;
+ 	color: white;
+ 	padding: 1rem;
+ 	-webkit-flex-basis: 25%;
+ 	    -ms-flex-preferred-size: 25%;
+ 	        flex-basis: 25%;
+ }
+
+
+#cndce-configurator .cndce-selection-table{
+	width: 100%;
+	text-align: left;
+	margin-top: 2rem;
+}
+
+#cndce-configurator .cndce-selection-table th{
+	width: 50%;
+}
