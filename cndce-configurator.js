@@ -317,7 +317,11 @@ $.fn.extend({
  				$option.data('option', option);
 
  				for(var j=0; j < option.choices.length; j++){
- 					option.choicesTemplateInit(option.choices[j], $('.cndce-option-choices', $option));
+ 					var $optionChoicesContainer = $('.cndce-option-choices', $option);
+ 					var $div = option.choicesTemplateInit(option.choices[j], $optionChoicesContainer);
+
+ 					$div.data('choice', option.choices[j]);
+ 					$optionChoicesContainer.append($div);
  				}
 
  				$optionsContainer.append($option);
@@ -408,7 +412,9 @@ $.fn.extend({
 
  			option.applyChoices(choice, truckModel, scene);
 
+
  			$('.cndce-selection-choice', $selection).text(choice.name);
+
 
 
  		});

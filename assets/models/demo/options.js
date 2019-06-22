@@ -33,9 +33,7 @@ CNDCE.ConfiguratorOptions = {
 				'background': choice.bg
 			});
 
-			$div.data('choice', choice);
-
-			$choicesContainer.append($div);
+			return $div;
 		},
 		applyChoices: function(choice, model, scene){
 			model.getObjectByName('mesh_DrawCall_03').material[0].color.set(choice.color);
@@ -69,8 +67,7 @@ CNDCE.ConfiguratorOptions = {
 				backgroundImage: 'url(' + choice.image + ')'
 			})
 
-			$div.data('choice', choice);
-			$choicesContainer.append($div);
+			return $div;
 		},
 		applyChoices: function(choice, model, scene){
 			var tireNames = ['tire-fr', 'tire-fl', 'tire-br', 'tire-bl'];
