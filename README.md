@@ -42,9 +42,14 @@ A URL to the icon of the option.
 *Required*
 An index of the initial selected choice in `choices[]`
 
+---
+
 ##### choices
 *Required*
 An array of choice objects. The objects may be custom defined depending on usage
+
+---
+
 
 ##### choicesTemplateInit(choice)
 *Required*
@@ -52,6 +57,9 @@ A function to create and customize the DOM element in `choices[]`. Must return t
 
 **Parameters:**
 - `choices` - An object in `choices[]` to be initialized.
+
+---
+
 
 
 ##### applyChoices(choice, model, scene)
