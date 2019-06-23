@@ -29,9 +29,14 @@ Available parameters for each options are:
 *Required*
 This will appear on the *Selected Configurations* section and Summaries.
 
+---
+
 ##### icon
 *Required*
 A URL to the icon of the option.
+
+---
+
 
 ##### defaultChoice
 *Required*
