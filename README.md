@@ -71,10 +71,14 @@ A URL to the icon of the option.
 
 ---
 
-
 ##### defaultChoice
 *Required*.
 An index of the initial selected choice in `choices[]`
+
+---
+
+##### optionType
+This will specify the type of option and may affect the UI/UX of the option's `DOM` element. Possible values are *'default'* and *'toggle'*
 
 ---
 
@@ -86,8 +90,11 @@ An array of choice objects. The objects may be custom defined depending on usage
 
 
 ##### choicesTemplateInit(choice)
-*Required*.
 A function to create and customize the DOM element in `choices[]`. Must return the DOM element.
+
+**Notes**
+- Returned DOM element should have a class name `cndce-option-choice`
+- This is ***required*** if optionType is *default*
 
 **Parameters:**
 - `choices` - An object in `choices[]` to be initialized.
