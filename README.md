@@ -60,33 +60,33 @@ CNDCE.ConfiguratorOptions = {
 Available parameters for each options are:
 
 ##### name
-*Required*
+*Required*.
 This will appear on the *Selected Configurations* section and Summaries.
 
 ---
 
 ##### icon
-*Required*
+*Required*.
 A URL to the icon of the option.
 
 ---
 
 
 ##### defaultChoice
-*Required*
+*Required*.
 An index of the initial selected choice in `choices[]`
 
 ---
 
 ##### choices
-*Required*
+*Required*.
 An array of choice objects. The objects may be custom defined depending on usage
 
 ---
 
 
 ##### choicesTemplateInit(choice)
-*Required*
+*Required*.
 A function to create and customize the DOM element in `choices[]`. Must return the DOM element.
 
 **Parameters:**
@@ -97,7 +97,7 @@ A function to create and customize the DOM element in `choices[]`. Must return t
 
 
 ##### applyChoices(choice, model, scene)
-*Required*
+*Required*.
 A function that runs when a choice is selected.
 
 **Parameters:**
