@@ -399,8 +399,16 @@ $.fn.extend({
  				intersected.object.material[i].opacity = 1;
  			}
 
-
  		}
+
+ 		function onModelPartMouseClick(e, intersected){
+ 			if(intersected.object.userData.onClick 
+ 				&& CNDCE.ConfiguratorFunctions[intersected.object.userData.onClick]){
+
+ 				CNDCE.ConfiguratorFunctions[intersected.object.userData.onClick](e, truckModel, scene);
+ 			}
+ 		}
+
 
  		function onModelPartMouseMove(e, intersected){
  			$hoverContainer.css({
@@ -471,6 +479,12 @@ $.fn.extend({
  			$container.removeClass('option-active');
 
 
+ 		});
+
+
+ 		$container.on('click', '#cndce-configurator-canvas', function(e){
+ 			if($container.hasClass('part-hovered'))
+	 			onModelPartMouseClick(e, currIntersected);
  		});
 
 
