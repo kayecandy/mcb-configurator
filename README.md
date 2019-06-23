@@ -8,6 +8,11 @@ assets/models/<model_name>
 ```
 
 
+**Models**
+- [Demo](https://repo.cndce.me/mcb-configurator/)
+- [Spitfire](https://repo.cndce.me/mcb-configurator/spitfire.html)
+
+
 ## Installation
 
 Include `cndce-configurator.css`
