@@ -26,7 +26,7 @@ CNDCE.ConfiguratorOptions = {
 				bg: 'black'
 			}
 		],
-		choicesTemplateInit: function(choice, $choicesContainer){
+		choicesTemplateInit: function(choice){
 			var $div = $('<div class="cndce-option-choice cndce-choice-color"></div>');
 
 			$div.css({
@@ -60,7 +60,7 @@ CNDCE.ConfiguratorOptions = {
 				image: './assets/images/options/rims/rim3.png'
 			}
 		],
-		choicesTemplateInit: function(choice, $choicesContainer){
+		choicesTemplateInit: function(choice){
 			var $div = $('<div class="cndce-option-choice cndce-choice-rim"></div>');
 
 			$div.css({
