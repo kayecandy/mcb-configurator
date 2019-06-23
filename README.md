@@ -8,6 +8,49 @@ assets/models/<model_name>
 ```
 
 
+## Installation
+
+Include cndce-configurator.css
+
+```
+<head>
+	...
+	<link rel="stylesheet" type="text/css" href="path_to_directory/cndce-configurator.css">
+	...
+</head>
+```
+
+Include ThreeJS, jQuery, cndce-configurator.js and options.js
+
+```
+<body>
+	...
+	...
+	<!-- ThreeJS -->
+	<script type="text/javascript" src="path_to_directory/lib/threejs/three.min.js"></script>
+  	<script type="text/javascript" src="path_to_directory/lib/threejs/controls/OrbitControls.js"></script>
+
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"
+	integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+	<!-- MCB Configurator -->
+	<script type="text/javascript" src="path_to_directory/cndce-configurator.js"></script>
+	<script type="text/javascript" src="path_to_directory/assets/models/<model_name>/options.js"></script>
+	...
+</body>
+```
+
+Initialize the configurator DIV element
+```
+$('#cndce-configurator').cndceConfigurator({
+	/* Parameters here */
+})
+```
+
+
+
 ## options.js
 This file contains the different configurable options for each model. Each key value pair is an individual configurable option.
 
