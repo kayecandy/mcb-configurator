@@ -1,5 +1,5 @@
 # mcb-configurator
-This is a 3D configurator for custom trucks using [threejs](https://threejs.org/) and [jQuery](https://jquery.com/)
+This is a 3D configurator for custom trucks using [ThreeJS](https://threejs.org/), [jQuery](https://jquery.com/) and [TweenJS](https://github.com/tweenjs/tween.js/)
 
 
 Individual truck models are stored in
@@ -22,6 +22,9 @@ Include ThreeJS, jQuery, `cndce-configurator.js` and `options.js`
 <!-- ThreeJS -->
 <script type="text/javascript" src="path_to_directory/lib/threejs/three.min.js"></script>
 	<script type="text/javascript" src="path_to_directory/lib/threejs/controls/OrbitControls.js"></script>
+
+<!-- TweenJS -->
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.3.5/Tween.min.js"></script>
 
 
 <!-- jQuery -->

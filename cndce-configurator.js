@@ -178,7 +178,7 @@ $.fn.extend({
  			requestAnimationFrame(render);
 
  			controls.update();
- 			// TWEEN.update();
+ 			TWEEN.update();
  			renderer.render(scene, camera);
  		}
 
