@@ -312,17 +312,41 @@ $.fn.extend({
  				// Options Container
  				var $option = getTemplate($optionItemTemplate);
 
- 				$('img', $option)[0].src = option.icon;
 
  				$option.data('option', option);
+ 				$option.attr('data-type', option.optionType);
 
- 				for(var j=0; j < option.choices.length; j++){
- 					var $optionChoicesContainer = $('.cndce-option-choices', $option);
- 					var $div = option.choicesTemplateInit(option.choices[j], $optionChoicesContainer);
 
- 					$div.data('choice', option.choices[j]);
- 					$optionChoicesContainer.append($div);
+ 				if(option.optionType == 'toggle'){
+ 					for(var j=0; j < option.choices.length; j++){
+ 						var $optionChoicesContainer = $('.cndce-option-choices', $option);
+ 						var $img = $('<img class="cndce-option-choice" />')
+
+ 						$img[0].src = option.choices[j].image;
+
+ 						if(j == option.defaultChoice){
+ 							$img.addClass('toggle-active');
+ 						}
+
+ 						$img.data('choice', option.choices[j]);
+ 						$optionChoicesContainer.append($img);
+
+ 					}
+
+ 				}else{
+
+	 				$('img', $option)[0].src = option.icon;
+
+ 					for(var j=0; j < option.choices.length; j++){
+ 						var $optionChoicesContainer = $('.cndce-option-choices', $option);
+ 						var $div = option.choicesTemplateInit(option.choices[j], $optionChoicesContainer);
+
+ 						$div.data('choice', option.choices[j]);
+ 						$optionChoicesContainer.append($div);
+ 					}
  				}
+
+ 				
 
  				$optionsContainer.append($option);
 
@@ -396,22 +420,44 @@ $.fn.extend({
  		});
 
 
- 		$container.on('click', '.cndce-option img', function(e){
+ 		$container.on('click', '.cndce-option .cndce-option-icon', function(e){
  			var $option = $(this).parents('.cndce-option');
- 			$option.addClass('active');
- 			$container.addClass('option-active');
+
+ 			if($option.data('type') == 'toggle'){
+
+ 			}else{
+ 				$option.addClass('active');
+ 				$container.addClass('option-active');
+ 			}
+ 			
  		});
 
  		$container.on('click', '.cndce-option-choice', function(e){
  			var $this = $(this);
  			var $option = $this.parents('.cndce-option');
  			var option = $option.data('option');
- 			var choice = $this.data('choice');
 
  			var $selection = $option.data('$selection');
 
- 			option.applyChoices(choice, truckModel, scene);
+ 			var choice;
 
+ 			if($option.data('type') == 'toggle'){
+ 				var $nextChoice = $this.next();
+
+ 				if(!$nextChoice.length){
+ 					$nextChoice = $this.siblings('.cndce-option-choice').eq(0);
+ 				}
+
+ 				choice = $nextChoice.data('choice');
+ 				$this.removeClass('toggle-active');
+ 				$nextChoice.addClass('toggle-active');
+
+
+ 			}else{
+ 				choice = $this.data('choice');
+ 			}
+
+ 			option.applyChoices(choice, truckModel, scene);
 
  			$('.cndce-selection-choice', $selection).text(choice.name);
 
