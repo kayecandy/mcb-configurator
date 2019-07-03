@@ -247,26 +247,17 @@ $.fn.extend({
 				params.modelURL,
 
 				function onLoad(obj){
-					console.log(obj);
 
 					truckModel = obj.getObjectByName('CndceModel');
 					scene.add(obj);
 
 					obj.position.copy(params.modelPosition);
-					// scene = obj;
-
 
 					initHoverables(truckModel);
 
-
-					// for(var i=0; i < truckModel.children.length; i++){
-					// 	var userData = truckModel.children[i].userData;
-
-					// 	// Child has hover
-					// 	if(userData.hover != undefined){
-					// 		hoverables.push(truckModel.children[i]);
-					// 	}
-					// }
+					if(CNDCE.ConfiguratorFunctions.initModel){
+						CNDCE.ConfiguratorFunctions.initModel(obj);
+					}
 
 				}
 			);
@@ -528,6 +519,11 @@ $.fn.extend({
 
  			// Param Set Defaults
  			params = getDefaults(params, defaults);
+
+
+ 			if(!CNDCE.ConfiguratorFunctions){
+ 				CNDCE.ConfiguratorFunctions = {}
+ 			}
 
  			initThreeJs();
  			initTestObjects();
