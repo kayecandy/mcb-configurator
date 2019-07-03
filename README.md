@@ -21,7 +21,9 @@ Include `cndce-configurator.css`
 <link rel="stylesheet" type="text/css" href="path_to_directory/cndce-configurator.css">
 ```
 
-Include ThreeJS, jQuery, `cndce-configurator.js` and `options.js`
+Include ThreeJS, jQuery and `cndce-configurator.js`
+
+Optional (per model) includes are `functions.js` and `options.js`
 
 ```html
 <!-- ThreeJS -->
@@ -38,6 +40,7 @@ integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="ano
 
 <!-- MCB Configurator -->
 <script type="text/javascript" src="path_to_directory/cndce-configurator.js"></script>
+<script type="text/javascript" src="path_to_directory/assets/models/<model_name>/functions.js"></script>
 <script type="text/javascript" src="path_to_directory/assets/models/<model_name>/options.js"></script>
 ```
 
@@ -47,6 +50,27 @@ $('#cndce-configurator').cndceConfigurator({
 	/* Parameters here */
 })
 ```
+
+
+## functions.js
+This contains all custom functions for the model.
+
+```javascript
+CNDCE.ConfiguratorFunctions = {
+	function1: function(paramA, paramB, paramN){ },
+	function2: function(paramA, paramB, paramN){ },
+	...
+	functionN: function(paramA, paramB, paramN){ }
+}
+````
+
+### Reserved functions
+
+##### initModel(model)
+This is called after the model has been loaded. Put custom scripts to initialize the model here.
+
+**Parameters**
+- `model` - a ThreeJS object of the model
 
 
 
