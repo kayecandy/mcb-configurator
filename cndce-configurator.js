@@ -30,8 +30,7 @@ $.fn.extend({
 
  			rendererOptions: {
  				antialias: true,
- 				alpha: true,
- 				shadows: true
+ 				alpha: true
  				// preserveDrawingBuffer: false
  			},
 
@@ -201,6 +200,8 @@ $.fn.extend({
  			// RENDERER
  			params.rendererOptions.canvas = canvas;
 			renderer = new THREE.WebGLRenderer(params.rendererOptions);
+			renderer.gammaOutput = true;
+			renderer.shadowMap.enabled = true;
 			renderer.setSize(width, height);
 			renderer.setPixelRatio(window.devicePixelRatio);
 
