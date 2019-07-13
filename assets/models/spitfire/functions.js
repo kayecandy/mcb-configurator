@@ -4,17 +4,39 @@ CNDCE.DOOR_OPEN_TWEEN_EASING = TWEEN.Easing.Back.Out;
 CNDCE.DOOR_CLOSE_TWEEN_DURATION = 400;
 CNDCE.DOOR_CLOSE_TWEEN_EASING = TWEEN.Easing.Cubic.Out;
 
+CNDCE.PAINT_URL = './assets/models/spitfire/textures/paint.png';
+
 CNDCE.ConfiguratorFunctions = {
+	initModel: function(model){
+		var textureLoader = new THREE.TextureLoader();
+
+		var paintL = model.getObjectByName('CrewCab').getObjectByName('PaintL');
+
+		// Paint Texture
+		textureLoader.load(
+			CNDCE.PAINT_URL,
+			function(texture){
+				paintL.material.map = texture;
+				paintL.material.needsUpdate = true;
+			}
+		)
+
+	},
 	toggleDoors: function(e, model, scene){
 		var doorsLeft = [
 			model.getObjectByName('DoorLeft').getObjectByName('Door1L'),
 			model.getObjectByName('DoorLeft').getObjectByName('Door2L'),
-			model.getObjectByName('DoorLeft').getObjectByName('Door3')
+			model.getObjectByName('DoorLeft').getObjectByName('Door3'),
+			model.getObjectByName('DoorRight').getObjectByName('Door1L_001'),
+			model.getObjectByName('DoorRight').getObjectByName('Door2L_001')
 		];
 
 		var doorsRight = [
 			model.getObjectByName('DoorLeft').getObjectByName('Door1R'),
-			model.getObjectByName('DoorLeft').getObjectByName('Door2R')
+			model.getObjectByName('DoorLeft').getObjectByName('Door2R'),
+			model.getObjectByName('DoorRight').getObjectByName('Door1R_001'),
+			model.getObjectByName('DoorRight').getObjectByName('Door2R_001'),
+			model.getObjectByName('DoorRight').getObjectByName('Door3_001')
 		];
 
 		var moveDoor = function(door, toAngle, duration, easing){
