@@ -1,4 +1,62 @@
 CNDCE.ConfiguratorOptions = {
+	colors: {
+		name: "Color",
+		icon: "./assets/images/icon-color.svg",
+		defaultChoice: 1,
+		choices: [
+			{
+				name: 'White',
+				color: '#e0e0e0',
+				bg: '#e0e0e0',
+				metalness: {
+					front: 0.8,
+					back: 0.8
+				},
+				roughness: {
+					front: 0.2,
+					back: 0.2
+				}
+			},
+			{
+				name: 'Red',
+				color: '#d0070f',
+				bg: '#d0070f',
+				metalness: {
+					front: 0.73,
+					back: 0.73
+				},
+				roughness: {
+					front: 0.02,
+					back: 0.02
+				}
+			},
+			{
+				name: 'Yellow',
+				color: '#e8c814',
+				bg: '#e8c814',
+				metalness: {
+					front: 0.73,
+					back: 0.73
+				},
+				roughness: {
+					front: 0.02,
+					back: 0.02
+				}
+			}
+		],
+		choicesTemplateInit: function(choice){
+			var $div = $('<div class="cndce-option-choice cndce-choice-color"></div>');
+
+			$div.css({
+				'background': choice.bg
+			});
+
+			return $div;
+		},
+		applyChoices: function(choice, model, scene){
+			CNDCE.ConfiguratorFunctions.changeColor(model, choice);
+		}
+	},
 	bodyType: {
 		name: "Body Type",
 		icon: "./assets/images/icon-crewcab.png",

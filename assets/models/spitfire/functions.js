@@ -80,5 +80,33 @@ CNDCE.ConfiguratorFunctions = {
 
 			CNDCE.isDoorsOpen = true;
 		}
+	},
+	changeColor: function(model, color){
+		var materials = [
+			{
+				side: 'front',
+				material: model.getObjectByName('FrontCommon').getObjectByName('Hood').material
+			},
+			{
+				side: 'back',
+				material: model.getObjectByName('Back').getObjectByName('Body').getObjectByName('Top').material
+			}
+		];
+
+
+
+		for(var i=0; i < materials.length; i++){
+			materials[i].material.color.set(color.color);
+
+			if(color.metalness[materials[i].side]){
+				materials[i].material.metalness = color.metalness[materials[i].side];
+			}
+
+			if(color.roughness[materials[i].side]){
+				materials[i].material.roughness = color.roughness[materials[i].side];
+			}
+		}
+
+
 	}
 }
