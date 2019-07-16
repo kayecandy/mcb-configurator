@@ -199,6 +199,30 @@ CNDCE.ConfiguratorOptions = {
 				normalTrays.visible = false;
 			}
 		}
+	},
+	hitch: {
+		name: "Trailer Hitch",
+		defaultChoice: 0,
+		optionType: "toggle",
+		choices: [
+			{
+				name: 'Without hitch',
+				image: './assets/images/icon-nohitch.png'
+			},
+			{
+				name: 'With hitch & light connector',
+				image: './assets/images/icon-nohitch.png'
+			}
+		],
+		applyChoices: function(choice, model, scene){
+			var hitch = model.getObjectByName('TrailerHitch');
+
+			if(choice.name == 'Without hitch'){
+				hitch.visible = false;
+			}else{
+				hitch.visible = true;
+			}
+		}
 	}
 	
 	
