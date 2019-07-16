@@ -1,4 +1,5 @@
 CNDCE.DOOR_OPEN_ANGLE = 90 * Math.PI / 180;
+CNDCE.DOOR_CLOSED_ANGLE = -180 * Math.PI  / 180;
 CNDCE.DOOR_OPEN_TWEEN_DURATION = 500;
 CNDCE.DOOR_OPEN_TWEEN_EASING = TWEEN.Easing.Back.Out;
 CNDCE.DOOR_CLOSE_TWEEN_DURATION = 400;
@@ -54,12 +55,12 @@ CNDCE.ConfiguratorFunctions = {
 		// If doors are open, close doors
 		if(CNDCE.isDoorsOpen){
 			for(var i=0; i < doorsLeft.length; i++){
-				moveDoor(doorsLeft[i], 0, CNDCE.DOOR_CLOSE_TWEEN_DURATION, CNDCE.DOOR_CLOSE_TWEEN_EASING);
+				moveDoor(doorsLeft[i], CNDCE.DOOR_CLOSED_ANGLE, CNDCE.DOOR_CLOSE_TWEEN_DURATION, CNDCE.DOOR_CLOSE_TWEEN_EASING);
 
 			}
 
 			for(var i=0; i < doorsRight.length; i++){
-				moveDoor(doorsRight[i], 0, CNDCE.DOOR_CLOSE_TWEEN_DURATION, CNDCE.DOOR_CLOSE_TWEEN_EASING);
+				moveDoor(doorsRight[i], CNDCE.DOOR_CLOSED_ANGLE, CNDCE.DOOR_CLOSE_TWEEN_DURATION, CNDCE.DOOR_CLOSE_TWEEN_EASING);
 			}
 			
 			
@@ -74,7 +75,7 @@ CNDCE.ConfiguratorFunctions = {
 			}
 
 			for(var i=0; i < doorsRight.length; i++){
-				moveDoor(doorsRight[i], CNDCE.DOOR_OPEN_ANGLE, CNDCE.DOOR_OPEN_TWEEN_DURATION, CNDCE.DOOR_OPEN_TWEEN_EASING);
+				moveDoor(doorsRight[i], CNDCE.DOOR_CLOSED_ANGLE - CNDCE.DOOR_OPEN_ANGLE, CNDCE.DOOR_OPEN_TWEEN_DURATION, CNDCE.DOOR_OPEN_TWEEN_EASING);
 			}
 			
 
