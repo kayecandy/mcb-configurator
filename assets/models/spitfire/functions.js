@@ -91,6 +91,10 @@ CNDCE.ConfiguratorFunctions = {
 			{
 				side: 'back',
 				material: model.getObjectByName('Back').getObjectByName('Body').getObjectByName('Top').material
+			},
+			{
+				side: 'back',
+				material: model.getObjectByName('Back').getObjectByName('Door1L').material[0]
 			}
 		];
 
@@ -107,6 +111,10 @@ CNDCE.ConfiguratorFunctions = {
 				materials[i].material.roughness = color.roughness[materials[i].side];
 			}
 		}
+
+
+		// Hinge Color
+		var hinge = model.getObjectByName('Back').getObjectByName('Hinges').material.color.set(color.color);
 
 
 	}
