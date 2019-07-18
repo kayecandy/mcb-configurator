@@ -226,6 +226,10 @@
 	height: 3rem;
 }
 
+#cndce-configurator .cndce-option-choice{
+	display: inline-block;
+}
+
 
 /* OPTIONS - TOGGLE */
 
@@ -287,6 +291,9 @@
 	
 }
 
+#cndce-configurator .cndce-options .cndce-choice-hosetray.switch-active{
+	text-decoration: underline;
+}
 
 
 

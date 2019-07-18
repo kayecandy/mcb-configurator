@@ -453,6 +453,19 @@ $.fn.extend({
  				$nextChoice.addClass('toggle-active');
 
 
+ 			}else if($option.data('type') == 'switches'){
+ 				choice = $this.data('choice');
+
+ 				if(choice.isActive){
+ 					$this.removeClass('switch-active');
+ 				}else{
+ 					$this.addClass('switch-active');
+ 				}
+
+ 				// Toggle choice
+ 				choice.isActive = !choice.isActive;
+
+
  			}else{
  				choice = $this.data('choice');
  			}
