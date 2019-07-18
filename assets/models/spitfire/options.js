@@ -145,25 +145,35 @@ CNDCE.ConfiguratorOptions = {
 		}
 	},
 	telescopingLights: {
-		name: "Telescoping Lights",
-		defaultChoice: 1,
-		optionType: "toggle",
+		name: 'Telescoping Scene Lights',
+		defaultChoice: 0,
+		optionType: 'switches',
+		icon: './assets/images/icon-telescopinglights.png',
 		choices: [
 			{
-				name: 'Has Telescoping Lights',
-				hasTelescopingLights: true,
-				image: './assets/images/icon-telescopinglights.png'
+				name: 'Telescoping Scene Light Front of Body',
+				modelName: 'TelescopingLightsL',
+				isActive: false
 			},
 			{
-				name: 'No Telescoping Lights',
-				hasTelescopingLights: false,
-				image: './assets/images/icon-notelescopinglights.png'
+				name: '2nd Telescoping Scene Light Front of Body',
+				modelName: 'TelescopingLightsR',
+				isActive: false
 			}
 		],
+		choicesTemplateInit: function(choice){
+			var $div = $('<div class="cndce-option-choice cndce-choice-telescopinglights"></div>')
+
+
+			$div.html(choice.name);
+
+			return $div;
+		},
 		applyChoices:function(choice, model, scene){
 			var telescopingLights = model.getObjectByName('TelescopingLights');
+			var telescopingLight = telescopingLights.getObjectByName(choice.modelName);
 
-			telescopingLights.visible = choice.hasTelescopingLights;
+			telescopingLight.visible = choice.isActive;
 
 		}
 	},
