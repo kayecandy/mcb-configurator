@@ -223,6 +223,50 @@ CNDCE.ConfiguratorOptions = {
 				hitch.visible = true;
 			}
 		}
+	},
+	hoseTray: {
+		name: 'Additional Hose Storage',
+		optionType: 'switches',
+		icon: './assets/images/icon-hosetray.png',
+		defaultChoice: 0,
+		choices: [
+			{
+				name: 'Hose Tray, Top of Side Compartment, 200\' of 2 1/2" Hose',
+				image: './assets/images/icon-hosetray.png',
+				isActive: false
+			},
+			{
+				name: 'Hose Tray, Top of Side Compartment, 200\' of 1 1/2" Hose',
+				image: './assets/images/icon-hosetray.png',
+				isActive: false
+			}
+		],
+		choicesTemplateInit: function(choice){
+			var $div = $('<div class="cndce-option-choice cndce-choice-hosetray"></div>')
+
+
+			$div.html(choice.name);
+
+			return $div;
+
+			
+		},
+		applyChoices: function(choice, model, scene){
+			
+
+			if(!model.userData.hoseTray)
+				model.userData.hoseTray = {};
+
+			model.userData.hoseTray[choice.name] = choice.isActive;
+
+			CNDCE.ConfiguratorFunctions.toggleHoseTray(model);
+			
+
+
+			
+
+		}
+
 	}
 	
 	

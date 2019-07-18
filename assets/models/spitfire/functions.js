@@ -82,6 +82,31 @@ CNDCE.ConfiguratorFunctions = {
 			CNDCE.isDoorsOpen = true;
 		}
 	},
+	toggleHoseTray: function(model){
+		var hoseTray = model.getObjectByName('HoseTray');
+		var backHandle = model.getObjectByName('Back').getObjectByName('BackHandle');
+
+		var showHoseTray = false;
+		var choicesVal = Object.values(model.userData.hoseTray);
+
+		for(var i=0; i < choicesVal.length; i++){
+			if(choicesVal[i]){
+				showHoseTray = true;
+				break;
+			}
+		}
+
+		if(showHoseTray){
+			hoseTray.visible = true;
+			backHandle.visible = false;
+
+		}else{
+			hoseTray.visible = false;
+			backHandle.visible = true;
+		}
+
+		console.log(model.userData.hoseTray);
+	},
 	changeColor: function(model, color){
 		var materials = [
 			{
@@ -115,7 +140,5 @@ CNDCE.ConfiguratorFunctions = {
 
 		// Hinge Color
 		var hinge = model.getObjectByName('Back').getObjectByName('Hinges').material.color.set(color.color);
-
-
 	}
 }
