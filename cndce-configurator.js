@@ -457,7 +457,9 @@ $.fn.extend({
  				choice = $this.data('choice');
  			}
 
- 			option.applyChoices(choice, truckModel, scene);
+ 			if(option.applyChoices){ 				
+	 			option.applyChoices(choice, truckModel, scene);
+ 			}
 
  			$('.cndce-selection-choice', $selection).text(choice.name);
 
