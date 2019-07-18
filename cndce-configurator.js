@@ -329,13 +329,21 @@ $.fn.extend({
 
 	 				$('img', $option)[0].src = option.icon;
 
- 					for(var j=0; j < option.choices.length; j++){
- 						var $optionChoicesContainer = $('.cndce-option-choices', $option);
- 						var $div = option.choicesTemplateInit(option.choices[j], $optionChoicesContainer);
+					if(option.choicesTemplateInit){
 
- 						$div.data('choice', option.choices[j]);
- 						$optionChoicesContainer.append($div);
- 					}
+	 					for(var j=0; j < option.choices.length; j++){
+	 						var $optionChoicesContainer = $('.cndce-option-choices', $option);
+
+							var $div = option.choicesTemplateInit(option.choices[j], $optionChoicesContainer);
+
+							$div.data('choice', option.choices[j]);
+							$optionChoicesContainer.append($div);
+	 						
+	 					}
+
+	 				}else{
+	 					console.error('Add a choicesTemplateInit() function to option ' + option.name);
+	 				}
  				}
 
  				
