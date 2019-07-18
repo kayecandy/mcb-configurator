@@ -110,7 +110,9 @@ An index of the initial selected choice in `choices[]`
 ---
 
 ##### optionType
-This will specify the type of option and may affect the UI/UX of the option's `DOM` element. Possible values are *'default'* and *'toggle'*
+This will specify the type of option and may affect the UI/UX of the option's `DOM` element. Possible values are *'default'*, *'toggle'* and *'switches'*
+
+*TODO: Add description of option types*
 
 ---
 
