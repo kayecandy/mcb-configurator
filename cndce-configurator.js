@@ -124,6 +124,9 @@ $.fn.extend({
  		}
 
  		function getLoader(filename){
+
+ 			filename = filename.split('?')[0];
+
  			// OBJ
  			if(filename.endsWith('.obj')){
  				if(objLoader == undefined){
