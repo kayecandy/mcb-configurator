@@ -51,6 +51,8 @@ $('#cndce-configurator').cndceConfigurator({
 })
 ```
 
+*TODO: Add initialization parameters. Include description to LFS here* 
+
 
 ## functions.js
 This contains all custom functions for the model.
