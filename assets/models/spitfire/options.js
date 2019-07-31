@@ -276,9 +276,62 @@ CNDCE.ConfiguratorOptions = {
 			
 
 		}
+	},
+	frontCompartment: {
+		name: 'Front Compartment',
+		optionType: 'toggle',
+		defaultChoice: 0,
+		choices: [
+			{
+				name: 'Enclosed',
+				image: './assets/images/icon-enclosed.png'
+			},
+			{
+				name: 'Transverse',
+				image: './assets/images/icon-enclosed.png'
+			}
+		],
+		applyChoices: function(choice, model, scene){
+			var modelBack = model.getObjectByName('Back');
 
+			var enclosed = [
+				modelBack.getObjectByName('Body').getObjectByName('Top'),
+				modelBack.getObjectByName('Body').getObjectByName('Inside'),
+				modelBack.getObjectByName('ContainersLeft').getObjectByName('Body1'),
+				modelBack.getObjectByName('ContainersRight').getObjectByName('Body1'),
+				modelBack.getObjectByName('Misc').getObjectByName('BlackBox'),
+				modelBack.getObjectByName('NormalTray1'),
+				modelBack.getObjectByName('SlideOutTray1')
+			];
+
+			var transverse = [
+				modelBack.getObjectByName('TransverseCompartment'),
+				modelBack.getObjectByName('NormalTray4'),
+				modelBack.getObjectByName('SlideOutTray4')
+			];
+
+			if(choice.name == 'Enclosed'){
+				for(var i=0; i < enclosed.length; i++){
+					enclosed[i].visible = true;
+				}
+
+				for(var i=0; i < transverse.length; i++){
+					transverse[i].visible = false;
+				}
+			}else{
+
+				for(var i=0; i < enclosed.length; i++){
+					enclosed[i].visible = false;
+					console.log('te', enclosed[i].name);
+				}
+
+				for(var i=0; i < transverse.length; i++){
+					transverse[i].visible = true;
+				}
+
+			}
+		}
 	}
-	
 	
 	
 }
