@@ -246,25 +246,29 @@ $.fn.extend({
 
  			var loader = getLoader(params.modelURL);
 
+ 			try{
+ 				loader.load(
+ 					params.modelURL,
 
-			loader.load(
-				params.modelURL,
+ 					function onLoad(obj){
 
-				function onLoad(obj){
+ 						truckModel = obj.getObjectByName('CndceModel');
+ 						scene.add(obj);
 
-					truckModel = obj.getObjectByName('CndceModel');
-					scene.add(obj);
+ 						obj.position.copy(params.modelPosition);
 
-					obj.position.copy(params.modelPosition);
+ 						initHoverables(truckModel);
 
-					initHoverables(truckModel);
+ 						if(CNDCE.ConfiguratorFunctions.initModel){
+ 							CNDCE.ConfiguratorFunctions.initModel(obj);
+ 						}
 
-					if(CNDCE.ConfiguratorFunctions.initModel){
-						CNDCE.ConfiguratorFunctions.initModel(obj);
-					}
-
-				}
-			);
+ 					}
+ 				);
+ 			}catch(err){
+ 				console.log('test');
+ 			}
+			
 
 
 
