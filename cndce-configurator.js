@@ -21,6 +21,7 @@ window.CNDCE = {};
 $.fn.extend({
  	cndceConfigurator: function(params){
  		var defaults = {
+ 			lfsURL: 'https://media.githubusercontent.com/media/kayecandy/mcb-configurator/master/',
  			modelURL: './assets/models/demo/model.json',
  			texturesURL: './assets/models/demo/textures/',
 
@@ -175,6 +176,14 @@ $.fn.extend({
  			}
  		}
 
+ 		function getModelURL(url){
+ 			if(params.lfsURL){
+ 				return params.lfsURL + url;
+ 			}
+
+ 			return url;
+ 		}
+
 
  		function render(){
  			requestAnimationFrame(render);
@@ -243,32 +252,28 @@ $.fn.extend({
  		}
 
  		function initModel(){
+ 			var modelURL = getModelURL(params.modelURL);
+ 			var loader = getLoader(modelURL);
 
- 			var loader = getLoader(params.modelURL);
 
- 			try{
- 				loader.load(
- 					params.modelURL,
+			loader.load(
+				modelURL,
 
- 					function onLoad(obj){
+				function onLoad(obj){
 
- 						truckModel = obj.getObjectByName('CndceModel');
- 						scene.add(obj);
+					truckModel = obj.getObjectByName('CndceModel');
+					scene.add(obj);
 
- 						obj.position.copy(params.modelPosition);
+					obj.position.copy(params.modelPosition);
 
- 						initHoverables(truckModel);
+					initHoverables(truckModel);
 
- 						if(CNDCE.ConfiguratorFunctions.initModel){
- 							CNDCE.ConfiguratorFunctions.initModel(obj);
- 						}
+					if(CNDCE.ConfiguratorFunctions.initModel){
+						CNDCE.ConfiguratorFunctions.initModel(obj);
+					}
 
- 					}
- 				);
- 			}catch(err){
- 				console.log('test');
- 			}
-			
+				}
+			);
 
 
 
