@@ -97,6 +97,14 @@ $.fn.extend({
  		var $selectionsContainer = $('.cndce-selection-table tbody', $container);
  		var $selectionItemTemplate = $('.cndce-selection.cndce-template', $selectionsContainer);
 
+ 		var $screenshotLink = $('#cndce-screenshot-link', $container);
+
+
+ 		function downloadScreenshot(){
+ 			renderer.render(scene, camera);
+ 			$screenshotLink[0].href = canvas.toDataURL();
+ 			$screenshotLink[0].click();
+ 		}
 
  		function getTemplate($template){
  			var $clone = $template.clone(true);
@@ -377,6 +385,7 @@ $.fn.extend({
  		}
 
  		function onModelLoad(e){
+ 			$container.focus();
  			$container.addClass('model-loaded');
  		}
 
@@ -550,8 +559,17 @@ $.fn.extend({
  		});
 
 
+ 		// Screenshots
+ 		$container.keyup(function(e){
+ 			if(e.key == 'p'){
+ 				downloadScreenshot();
+ 			}
+ 		})
+
+
 
  		;(function init(){
+
 
  			// Param Set Defaults
  			params = getDefaults(params, defaults);
@@ -565,6 +583,8 @@ $.fn.extend({
  			initTestObjects();
  			initModel();
  			initOptions();
+
+
 
  		})();
  	}
