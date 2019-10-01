@@ -1,0 +1,99 @@
+/* COLORS */
+#cndce-configurator .cndce-option[data-key="colors"] .cndce-option-choice {
+    width: 6rem;
+    height: 6rem;
+    display: block;
+    border-radius: 0.5rem;
+    margin: 1rem;
+    border: solid 0.5rem #ffffff45;
+    box-shadow: 0px 0px 6px 0 #0000004d;
+}
+
+
+
+
+/* BODY TYPE */
+#cndce-configurator .cndce-option[data-key="bodyType"]{
+	width: 14rem;
+}
+
+
+#cndce-configurator .cndce-option[data-key="bodyType"] .cndce-option-choice{
+	display: block;
+ 	/*background: url('../../images/grey-background-texture.jpg');*/
+ 	background: #00000096;
+	padding: 0.5rem;
+	margin: 1rem;
+	border-radius: 0.5rem;
+	box-shadow: 1px 0px 7px 1px #0000004f;
+	border: #ffffff1f 0.5rem solid;
+}
+
+#cndce-configurator .cndce-option[data-key="bodyType"] .cndce-option-choice.active{
+	background: #b7000ead;
+}
+
+#cndce-configurator .cndce-option[data-key="bodyType"] .cndce-option-choice .cndce-option-bg{
+	width: 10rem;
+    height: 10rem;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+
+
+
+/* BUMPER */
+#cndce-configurator .cndce-option[data-key="bumper"]{
+	width: 12rem;
+}
+
+#cndce-configurator .cndce-option[data-key="bumper"] .cndce-option-choice{
+	width: 12rem;
+	height: 12rem;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+
+/* FRONT COMPARTMENT */
+#cndce-configurator .cndce-option[data-key="frontCompartment"]{
+	width: 16rem;
+}
+
+#cndce-configurator .cndce-option[data-key="frontCompartment"] .cndce-option-choice{;
+	margin: 2rem 0;
+}
+
+#cndce-configurator .cndce-option[data-key="frontCompartment"] .cndce-option-choice img{
+	width: 100%;
+}
+
+
+/* TANK SIZE */
+#cndce-configurator .cndce-option[data-key="tankSize"] .cndce-option-choice img{
+	width: 10rem;
+}
+
+
+/* DISCHARRGES */
+#cndce-configurator .cndce-option[data-key="discharges"]{
+	width: 14rem;
+	padding: 1rem;
+}
+
+#cndce-configurator .cndce-option[data-key="discharges"] .cndce-option-choice {
+	width: 9.5rem;
+    display: block;
+    background: #1d1d1db8;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin: 1rem 0;
+    border: solid 0.5rem #a5a5a557;
+    box-shadow: 0px 0px 6px 0 #0000004d;
+    font-weight: bold;
+    color: white;
+}

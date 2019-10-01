@@ -1,0 +1,10 @@
+{
+
+	"textureURL": "./assets/env/pano1.jpg",
+	"radius" : 30,
+	"widthSegments": 20,
+	"heightSegments": 20,
+	"position": {"x": 0, "y": 3.65, "z": 0},
+	"rotation": {"x": 0, "y": 1.2, "z": 0},
+	"scale": {"x": 1, "y": 1, "z": 1}
+}

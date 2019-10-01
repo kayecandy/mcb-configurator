@@ -1,0 +1,14 @@
+<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+ <title/>
+
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <path fill="#b7000e" id="svg_1" d="m21.950033,10.549967a6.52,6.52 0 0 0 -6,-6.5l0,-1l-2,0l0,1l-4,0l0,-1l-2,0l0,1a6.52,6.52 0 0 0 -6,6.5a6.39,6.39 0 0 0 1.83,4.5l-1.83,0l0,2l1.18,0a3,3 0 0 0 -0.18,1a3,3 0 0 0 6,0a3,3 0 0 0 -0.18,-1l6.37,0a3,3 0 0 0 -0.19,1a3,3 0 0 0 6,0a3,3 0 0 0 -0.18,-1l1.18,0l0,-2l-1.83,0a6.39,6.39 0 0 0 1.83,-4.5zm-16,8.5a1,1 0 1 1 1,-1a1,1 0 0 1 -1,1zm13,-1a1,1 0 1 1 -1,-1a1,1 0 0 1 1,1z"/>
+  <text font-weight="bold" stroke="#000" transform="matrix(0.3648452533163,0,0,0.3648452533163,2.1877772171074223,3.0756228672605093) " xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="20" id="svg_2" y="25.837738" x="4.719885" stroke-width="0" fill="#ffffff">300</text>
+  <text font-weight="bold" stroke="null" transform="matrix(0.13041173754706997,0,0,0.13041173754706997,8.9145768400281,2.664311801861476) " xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="20" id="svg_3" y="73.580477" x="54.957839" stroke-opacity="null" stroke-width="0" fill="#ffffff">gal.</text>
+ </g>
+</svg>

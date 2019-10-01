@@ -24,10 +24,14 @@ $.fn.extend({
  			lfsURL: 'https://media.githubusercontent.com/media/kayecandy/mcb-configurator/master/',
  			modelURL: './assets/models/demo/model.json',
  			texturesURL: './assets/models/demo/textures/',
+ 			envJSON: './assets/env/env1.json',
 
  			modelPosition: {x: 0, y: 0, z: 0},
 
  			cameraPosition: {x: 6.221168079763829, y: 2.238338815849478, z: 6.248784645270256},
+ 			cameraPositionTweenEasing: TWEEN.Easing.Cubic.Out,
+ 			cameraPositionTweenDuration: 1000,
+
 
  			rendererOptions: {
  				antialias: true,
@@ -40,8 +44,8 @@ $.fn.extend({
 
 
  			controlsTarget: {x: 0.04693004944501031, y: 0.7000000000000001, z: 0.030806087039626822},
- 			controlsMinPolarAngle: 0.39792784908717854,
- 			controlsMaxPolarAngle: 1.7127947295652755,
+ 			controlsMinPolarAngle: 1.3361462735676852,
+ 			controlsMaxPolarAngle: 1.4960513154939388,
  			controlsEnableZoom: true,
  			controlsEnableDamping: true,
  			controlsDampingFactor: 0.15,
@@ -49,7 +53,17 @@ $.fn.extend({
  			controlsEnablePan: true,
  			controlsRotateSpeed: 0.05,
 
- 			hoverOffset: {x: 10, y: 0}
+ 			controlsTargetTweenDuration: 1000,
+ 			controlsTargetTweenEasing: TWEEN.Easing.Cubic.InOut,
+
+ 			bgRadius: 30,
+ 			bgWidthSegments: 20,
+ 			bgHeightSegments: 20,
+
+ 			hoverOffset: {x: 10, y: 0},
+
+ 			showSelectionTimeoutDuration: 1000,
+ 			noSelectionText: 'None Selected'
  		}
 
  		// THREE JS Elements 
@@ -68,10 +82,12 @@ $.fn.extend({
  		var bufferGeometryLoader;
  		var colladaLoader;
  		var objectLoader;
+ 		var textureLoader;
 
  		var raycaster;
  		var mouse = new THREE.Vector2();
 
+ 		var bgBox;
  		var truckModel;
 
  		var hoverables = [];
@@ -93,11 +109,18 @@ $.fn.extend({
  		var $hoverTitle = $('.cndce-hover-title', $hoverContainer);
  		var $hoverDescription = $('.cndce-hover-description', $hoverContainer);
  			
+ 		var $selectionsCategoryContainer = $('.cndce-selections-categories', $container);
+ 		var $selectionsCategoryTemplate = $('.cndce-selections-category.cndce-template', $selectionsCategoryContainer);
 
- 		var $selectionsContainer = $('.cndce-selection-table tbody', $container);
+ 		var $selectionsContainer = $('.cndce-selections-content .cndce-selections-content-wrapper', $container);
  		var $selectionItemTemplate = $('.cndce-selection.cndce-template', $selectionsContainer);
+ 		var $selectionsCategoryItemsTemplate = $('.cndce-selections-category-items.cndce-template', $selectionsContainer);
+
+ 		var $selectionsToggleButton = $('#cndce-selections-toggle', $container);
 
  		var $screenshotLink = $('#cndce-screenshot-link', $container);
+
+ 		var controlsEndTimer;
 
 
  		function downloadScreenshot(){
@@ -192,6 +215,91 @@ $.fn.extend({
  			return url;
  		}
 
+ 		function goToCameraZoom(zoomPosition){
+ 			var spherical = (new THREE.Spherical()).setFromVector3(zoomPosition);
+
+ 			goToCameraSphericalPosition(spherical.radius, controls.getPolarAngle(), controls.getAzimuthalAngle());
+ 		}
+
+ 		function goToCameraPosition(position){
+ 			if(camera.position.distanceTo(position) <= 1)
+ 				return;
+
+ 			var spherical = (new THREE.Spherical()).setFromVector3(position);
+
+ 			goToCameraSphericalPosition(spherical.radius, spherical.phi, spherical.theta, position);
+ 		}
+
+ 		function goToCameraSphericalPosition(radius, polarAngle, azimuthalAngle, position){
+
+ 			new TWEEN.Tween({
+					radius: controls.target.distanceTo(camera.position),
+					polarAngle: controls.getPolarAngle(),
+					azimuthalAngle: controls.getAzimuthalAngle()
+	 			})
+
+ 				.to({
+ 					radius: radius,
+ 					polarAngle: polarAngle,
+ 					azimuthalAngle: azimuthalAngle
+ 				}, params.cameraPositionTweenDuration)
+
+ 				.easing(params.cameraPositionTweenEasing)
+
+ 				.onUpdate(function(){
+ 					camera.position.setFromSphericalCoords(
+ 						this.radius,
+ 						this.polarAngle,
+ 						this.azimuthalAngle
+ 					)
+
+ 					controls.update();
+ 				})
+
+ 				.onComplete(function(){
+ 					// console.log(position);
+ 					if(position)
+	 					camera.position.copy(position);
+ 				})
+
+ 				.start();
+ 		}
+
+ 		function goToControlsTarget(position){
+ 			if(controls.target.equals(position))
+ 				return;
+
+ 			// controls.target.copy(position);
+ 			new TWEEN.Tween(controls.target)
+ 				.to(position, params.controlsTargetTweenDuration)
+ 				.easing(params.controlsTargetTweenEasing)
+ 				.start();
+ 		}
+
+ 		function toPriceFormat(priceNum){
+ 			if(priceNum)
+	 			return '$' + priceNum.toFixed(2);
+
+	 		return '';
+ 		}
+
+ 		function toSelectionNameFormat(name, price, quantity){
+ 			var $name = $('<span>' + name + '</span>');
+
+ 			if(price){
+ 				var $price = $('<span></span>');
+ 				price =  toPriceFormat(price);
+
+ 				if(quantity > 1)
+ 					$price.html(' (' + price + ' x' + quantity + ')');
+ 				else
+ 					$price.html(' (' + price + ')');
+
+ 				$name.append($price); 
+ 			}
+
+ 			return $name;
+ 		}
 
  		function render(){
  			requestAnimationFrame(render);
@@ -201,6 +309,159 @@ $.fn.extend({
  			renderer.render(scene, camera);
  		}
 
+ 		function deactivateActiveOption(){
+ 			var $option = $('.cndce-option.active', $optionsContainer);
+ 			$option.removeClass('active');
+
+ 			$container.removeClass('option-active');
+
+
+ 		}
+
+
+ 		function updateChoiceQuantity($choice, deltaQuantity){
+ 			var choice = $choice.data('choice');
+
+ 			var $value = $('.choice-quantity-val', $choice);
+
+ 			choice.quantity = choice.quantity ? choice.quantity + deltaQuantity : deltaQuantity;
+
+ 			if(choice.basePrice){
+	 			choice.price = choice.quantity * choice.basePrice;			
+ 			}
+
+ 			$value.html(choice.quantity);
+ 		}
+
+ 		function updateSelection($selection, choice){
+ 			var $option = $selection.data('$option');
+ 			var option = $option.data('option');
+
+ 			var $selectionChoice = $('.cndce-selection-choice', $selection);
+ 			var $selectionPrice = $('.cndce-selection-price', $selection);
+
+			var price = 0;	
+
+ 			if($option.data('type') == 'switches'){
+
+ 				$selectionChoice.html('');
+
+ 				for(var i=0; i < option.choices.length; i++){
+ 					if(option.choices[i].isActive){
+ 						var priceString = option.choices[i].price;
+
+ 						if(option.choices[i].quantity && option.choices[i].basePrice){
+ 							priceString = option.choices[i].basePrice;
+ 						}
+
+ 						var $li = $('<li></li>');
+ 						$li.html(toSelectionNameFormat(option.choices[i].name, priceString, option.choices[i].quantity));
+
+ 						$selectionChoice.append($li);
+
+ 						if(option.choices[i].price){
+	 						price += option.choices[i].price;
+ 						}
+
+ 					}
+ 				}
+
+ 				if($selectionChoice.html() == ''){
+ 					$selectionChoice.text(params.noSelectionText);
+ 				}
+
+
+ 			}else{
+
+				$selectionChoice.html(toSelectionNameFormat(choice.name, choice.basePrice, choice.quantity));
+ 
+	 			price = choice.price;
+ 			}
+
+
+ 			if(price){
+				$selectionPrice.text('+ ' + toPriceFormat(price));
+ 			}else{
+				$selectionPrice.text('');
+
+ 			}
+ 		}
+
+
+ 		// 360 videos are supported but I couldn't find a suitable sample
+ 		function initBackgroundMap(textureURL){
+ 			// Image Background
+ 			if(textureURL.endsWith('.jpg')){
+ 				return textureLoader.load(textureURL);
+ 			}
+
+ 			// Video Backgrounds
+ 			else if(textureURL.endsWidth('.mp4')){
+ 				var bgVideo = document.createElement('video');
+ 				var $bgVideo = $(bgVideo);
+ 				bgVideo.src = textureURL;
+
+
+ 				$bgVideo.prop('autoplay', true);
+ 				$bgVideo.prop('loop', true);
+
+ 				// window.bgVideo = bgVideo;
+
+ 				return new THREE.VideoTexture(bgVideo);
+ 			}
+
+ 		}
+
+ 		function initBackground(bgData){
+ 			var radius = (bgData.radius) ? bgData.radius : params.bgRadius;
+ 			var widthSegments = (bgData.widthSegments) ? bgData.widthSegments : params.bgWidthSegments;
+ 			var heightSegments = (bgData.heightSegments) ? bgData.heightSegments : params.bgWidthSegments;
+
+
+ 			var bgGeometry = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
+ 			var bgMaterial = new THREE.MeshBasicMaterial({
+ 				side: THREE.BackSide,
+ 				map: initBackgroundMap(bgData.textureURL)
+ 			});
+
+ 			for(var i=0;i<bgGeometry.vertices.length;i++){
+ 			  var v = bgGeometry.vertices[i];
+ 			  if(v.y<-6)
+ 			      v.y=-6;
+
+ 			}
+
+
+
+ 			bgGeometry.computeFaceNormals();
+ 			bgGeometry.computeVertexNormals();
+ 			bgGeometry.verticesNeedUpdate = true;
+
+
+ 			bgBox = new THREE.Mesh(bgGeometry, bgMaterial);
+
+ 			if(bgData.position)
+	 			bgBox.position.copy(bgData.position);
+
+	 		// copy() does not work
+	 		if(bgData.rotation){
+	 			bgBox.rotation.x = bgData.rotation.x;
+	 			bgBox.rotation.y = bgData.rotation.y;
+	 			bgBox.rotation.z = bgData.rotation.z;
+	 		}
+
+	 		if(bgData.scale)
+	 			bgBox.scale.copy(bgData.scale);
+
+ 			scene.add(bgBox);
+
+
+ 			// console.log(bgData.rotation);
+ 			// window.bgBox = bgBox;
+
+
+
+ 		}
 
  		function initThreeJs(){
  			var width = $canvas.width();
@@ -221,9 +482,11 @@ $.fn.extend({
  			params.rendererOptions.canvas = canvas;
 			renderer = new THREE.WebGLRenderer(params.rendererOptions);
 			renderer.gammaOutput = true;
+			renderer.gammaFactor = 1.8;
 			renderer.shadowMap.enabled = true;
 			renderer.setSize(width, height);
 			renderer.setPixelRatio(window.devicePixelRatio);
+			renderer.autoClearColor = false;
 
 			// LIGHTS
 			ambientLight = new THREE.AmbientLight(params.ambientLightColor, params.ambientLightIntensity);
@@ -245,14 +508,29 @@ $.fn.extend({
 
 			controls.target.copy(params.controlsTarget);
 
+			controls.addEventListener('start', onControlsStart)
+			controls.addEventListener('end', onControlsEnd);
+
 
 			// LOADERS
 			loadingManager = new THREE.LoadingManager();
-			loadingManager.onLoad = onModelLoad;
+			loadingManager.onLoad = onLoadingManagerLoad;
+
+			textureLoader = new THREE.TextureLoader(loadingManager);
 
 
+			// BACKGROUND
+			if(params.envJSON){
+				$.ajax({
+					url: params.envJSON,
+					success: initBackground
+				})
+			}
+			
+			
 			// RAYCASTER
 			raycaster = new THREE.Raycaster();
+
 
 
 
@@ -267,14 +545,17 @@ $.fn.extend({
 			loader.load(
 				modelURL,
 
-				function onLoad(obj){
+				function onModelLoad(obj){
 
 					truckModel = obj.getObjectByName('CndceModel');
 					scene.add(obj);
 
-					obj.position.copy(params.modelPosition);
-
+					initOptionsCategories();
+		 			initOptions();
+		 			initTestObjects();
 					initHoverables(truckModel);
+
+					obj.position.copy(params.modelPosition);
 
 					if(CNDCE.ConfiguratorFunctions.initModel){
 						CNDCE.ConfiguratorFunctions.initModel(obj);
@@ -305,14 +586,50 @@ $.fn.extend({
  			window.renderer = renderer;
  			window.controls = controls;
 
+ 			window.bgBox = bgBox;
+ 			window.truckModel = truckModel;
  			window.hoverables = hoverables;
 
  			window.canvas = canvas;
  		}
 
+ 		function initOptionsCategories(){
+ 			if(!CNDCE.ConfiguratorOptionsCategories)
+ 				return;
+
+ 			var optionCategories = Object.keys(CNDCE.ConfiguratorOptionsCategories);
+
+ 			for(var i=0; i < optionCategories.length; i++){
+ 				var category = CNDCE.ConfiguratorOptionsCategories[optionCategories[i]];
+
+ 				var $category = getTemplate($selectionsCategoryTemplate);
+ 				$('span', $category).html(category.name);
+ 				$('img', $category)[0].src = category.icon;
+
+
+ 				$selectionsCategoryContainer.append($category);
+
+
+
+ 				var $categoryContainer = getTemplate($selectionsCategoryItemsTemplate);
+
+ 				$categoryContainer.attr('data-category', optionCategories[i]);
+ 				$category.data('$itemsContainer', $categoryContainer);
+
+ 				$selectionsContainer.append($categoryContainer);
+
+ 				category.$selectionsContainer = $categoryContainer;
+
+ 				if(category.default){
+ 					$category.addClass('active');
+ 					$categoryContainer.addClass('active');
+ 				}
+ 			}
+ 		}
+
 
  		function initOptions(){
- 			if(CNDCE.ConfiguratorOptions == undefined)
+ 			if(!CNDCE.ConfiguratorOptions)
  				return;
 
  			var optionKeys = Object.keys(CNDCE.ConfiguratorOptions);
@@ -324,7 +641,7 @@ $.fn.extend({
  				// Options Container
  				var $option = getTemplate($optionItemTemplate);
 
-
+ 				$option.attr('data-key', optionKeys[i]);
  				$option.data('option', option);
  				$option.attr('data-type', option.optionType);
 
@@ -332,22 +649,18 @@ $.fn.extend({
  				if(option.optionType == 'toggle'){
  					for(var j=0; j < option.choices.length; j++){
  						var $optionChoicesContainer = $('.cndce-option-choices', $option);
- 						var $img = $('<img class="cndce-option-choice" />')
-
- 						$img[0].src = option.choices[j].image;
+ 						var $div = $('<div class="cndce-option-choice"></div>')
 
  						if(j == option.defaultChoice){
- 							$img.addClass('toggle-active');
+ 							$div.addClass('toggle-active');
  						}
 
- 						$img.data('choice', option.choices[j]);
- 						$optionChoicesContainer.append($img);
+ 						$div.data('choice', option.choices[j]);
+ 						$optionChoicesContainer.append($div);
 
  					}
 
  				}else{
-
-	 				$('img', $option)[0].src = option.icon;
 
 					if(option.choicesTemplateInit){
 
@@ -356,6 +669,14 @@ $.fn.extend({
 
 							var $div = option.choicesTemplateInit(option.choices[j], $optionChoicesContainer);
 
+							if(option.choices[j].class){
+								$div.addClass(option.choices[j].class);
+							}
+
+							if(j == option.defaultChoice)
+								$div.addClass('active');
+
+							$div.addClass('cndce-option-choice');
 							$div.data('choice', option.choices[j]);
 							$optionChoicesContainer.append($div);
 	 						
@@ -370,21 +691,55 @@ $.fn.extend({
 
  				$optionsContainer.append($option);
 
+	 			new SimpleBar($option[0]);
 
 
  				// Selections Container
  				var $selection = getTemplate($selectionItemTemplate);
+ 				var defaultChoice = option.choices[option.defaultChoice];
 
- 				$('.cndce-selection-name', $selection).text(option.name);
- 				$('.cndce-selection-choice', $selection).text(option.choices[option.defaultChoice].name);
-
+ 				$selection.data('$option', $option);
  				$option.data('$selection', $selection);
 
- 				$selectionsContainer.append($selection);
+
+ 				$('.cndce-selection-name', $selection).text(option.longName ? option.longName : option.name);
+
+ 				if(defaultChoice){
+ 					updateSelection($selection, defaultChoice);
+ 				}else{
+ 					$('.cndce-selection-choice', $selection).text(params.noSelectionText);
+ 				}
+ 				
+
+ 				
+
+ 				if(CNDCE.ConfiguratorOptionsCategories)
+ 					var category = CNDCE.ConfiguratorOptionsCategories[option.category];
+
+
+ 				if(option.category && category){
+ 					category.$selectionsContainer.append($selection);
+
+ 				}else{
+	 				$selectionsContainer.append($selection);
+
+ 				}
+
+
+
+ 				// Apply Default Choice
+ 				// if(option.applyChoices)
+	 			// 	option.applyChoices(defaultChoice, truckModel, scene);
  			}
+
+ 			// Init scrollbar
+ 			new SimpleBar($selectionsContainer[0]);
  		}
 
- 		function onModelLoad(e){
+ 		function onLoadingManagerLoad(e){
+
+			console.log('loading manager load');
+
  			$container.focus();
  			$container.addClass('model-loaded');
  		}
@@ -438,6 +793,27 @@ $.fn.extend({
  			})
  		}
 
+ 		function onControlsStart(e){
+ 			clearTimeout(controlsEndTimer);
+
+ 			deactivateActiveOption(true);
+ 			$container.addClass('selections-hidden');
+
+ 			// Camera position changes
+ 			
+ 			if(!controls.target.equals(params.controlsTarget)){
+ 				goToControlsTarget(params.controlsTarget);
+ 				goToCameraZoom(params.cameraPosition);
+ 			}
+ 		}
+
+ 		function onControlsEnd(e){
+ 			controlsEndTimer = setTimeout(function(){
+ 				$container.removeClass('selections-hidden');
+
+ 			}, params.showSelectionTimeoutDuration);
+ 		}
+
 
  		// Window Resize Event
  		$(window).on('resize', function(){
@@ -448,21 +824,82 @@ $.fn.extend({
  			renderer.setSize($canvas.width(), $canvas.height());
  		});
 
-
- 		$container.on('click', '.cndce-option .cndce-option-icon', function(e){
- 			var $option = $(this).parents('.cndce-option');
-
- 			if($option.data('type') == 'toggle'){
-
- 			}else{
- 				$option.addClass('active');
- 				$container.addClass('option-active');
- 			}
- 			
+ 		$selectionsToggleButton.click(function onSelectionsToggleClick(e){
+ 			$container.toggleClass('selections-hidden');
  		});
 
- 		$container.on('click', '.cndce-option-choice', function(e){
+ 		$selectionsToggleButton.hover(function onSelectionsToggleHover(e){
+ 			if($container.hasClass('selections-hidden'))
+ 				$container.removeClass('selections-hidden');
+ 		});
+
+
+ 		$container.on('click', '.cndce-selection', function onSelectionClick(e){
+ 			var $option = $(this).data('$option');
+ 			var option = $option.data('option');
+
+ 			if(!$option.hasClass('active')){
+ 				if(option.cameraPosition){
+ 					goToCameraPosition(option.cameraPosition);
+ 				}else{
+ 					goToCameraPosition(params.cameraPosition);
+ 				}
+
+ 				if(option.controlsTarget){
+ 					goToControlsTarget(option.controlsTarget);
+ 				}else{
+ 					goToControlsTarget(params.controlsTarget);
+ 				}
+ 			}
+
+ 			deactivateActiveOption();
+			$option.addClass('active');
+
+
+ 			if($option.data('type') == 'toggle'){
+ 				$('.toggle-active', $option).click();
+
+ 			}else if($option.data('type') == 'switches'){
+ 				// Show options dialog
+ 				$container.addClass('option-active');
+ 			}else{
+ 				// Show options dialog
+ 				$container.addClass('option-active');
+ 				if(!option.keepSelectionsOpen){
+	 				// Hide Selections Container
+		 			$container.addClass('selections-hidden');
+ 					 				
+	 			}
+			}
+ 		});
+
+ 		$container.on('click', '.cndce-selections-category', function onSelectionsCategoryClick(e){
  			var $this = $(this);
+
+ 			$('.cndce-selections-category.active', $selectionsCategoryContainer).removeClass('active');
+
+ 			$this.addClass('active');
+
+
+
+ 			$('.cndce-selections-category-items.active', $selectionsContainer).removeClass('active');
+
+ 			$this.data('$itemsContainer').addClass('active');
+
+
+
+
+ 		})
+
+ 
+
+
+ 		$container.on('click', '.cndce-option-choice', function onChoiceClick(e){
+ 			var $this = $(this);
+
+ 			if($this.hasClass('disabled') || $this.hasClass('active'))
+ 				return;
+
  			var $option = $this.parents('.cndce-option');
  			var option = $option.data('option');
 
@@ -489,6 +926,12 @@ $.fn.extend({
  					$this.removeClass('switch-active');
  				}else{
  					$this.addClass('switch-active');
+ 					if(!choice.quantity){
+ 						choice.quantity = 1;
+ 						updateChoiceQuantity($this, 0);
+ 					}
+
+ 					// console.log(choice.quantity);
  				}
 
  				// Toggle choice
@@ -496,6 +939,9 @@ $.fn.extend({
 
 
  			}else{
+ 				$('.cndce-option-choice.active', $option).removeClass('active');
+
+ 				$this.addClass('active');
  				choice = $this.data('choice');
  			}
 
@@ -503,20 +949,48 @@ $.fn.extend({
 	 			option.applyChoices(choice, truckModel, scene);
  			}
 
- 			$('.cndce-selection-choice', $selection).text(choice.name);
+ 			// Camera & Controls Position
+ 			if(choice.cameraPosition)
+ 				goToCameraPosition(choice.cameraPosition);
+ 			if(choice.controlsTarget)
+ 				goToControlsTarget(choice.controlsTarget);
 
 
-
+ 			// Update selections
+ 			updateSelection($selection, choice);
+ 			
  		});
 
- 		$container.on('click', '.cndce-option-choices-back', function(e){
- 			var $option = $(this).parents('.cndce-option');
- 			$option.removeClass('active');
- 			$container.removeClass('option-active');
+ 		
 
+ 		$container.on('click', '.choice-quantity-minus', function onChoiceQuantityMinusClick(e){
+ 			var $choice = $(this).parents('.cndce-option-choice');
+ 			var choice = $choice.data('choice');
 
+ 			if(!choice.quantity){
+ 				choice.isActive = true;
+ 				return;
+ 			}
+
+ 			if(choice.isActive && choice.quantity - 1 > 0){
+ 				choice.isActive = false;
+ 				// e.stopPropagation();
+ 			}
+
+ 			updateChoiceQuantity($choice, -1);
  		});
 
+ 		$container.on('click', '.choice-quantity-plus', function onChoiceQuantityPlusClick(e){
+ 			var $choice = $(this).parents('.cndce-option-choice');
+ 			var choice = $choice.data('choice');
+
+ 			choice.isActive = false;
+
+ 			if(choice.maxQuantity && choice.quantity >= choice.maxQuantity)
+ 				return;
+
+ 			updateChoiceQuantity($choice, 1);
+ 		})
 
  		$container.on('click', '#cndce-configurator-canvas', function(e){
  			if($container.hasClass('part-hovered'))
@@ -580,9 +1054,7 @@ $.fn.extend({
  			}
 
  			initThreeJs();
- 			initTestObjects();
  			initModel();
- 			initOptions();
 
 
 
