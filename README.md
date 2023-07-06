@@ -9,8 +9,8 @@ assets/models/<model_name>
 
 
 **Models**
-- [Demo](https://repo.cndce.me/mcb-configurator/)
-- [Spitfire](https://repo.cndce.me/mcb-configurator/spitfire.html)
+- [Demo](https://kayecandy.github.io/mcb-configurator)
+- [Spitfire](https://kayecandy.github.io/mcb-configurator/spitfire)
 
 
 ## Installation
